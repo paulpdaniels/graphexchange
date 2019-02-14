@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const {ApolloServer, gql} = require('apollo-server-express');
 const express = require('express');
 const request = require('request');
@@ -5,9 +7,10 @@ const {SEDataSource} = require('./sources/base');
 const MeDataSource = require('./sources/users');
 const R = require('ramda');
 
+
 const app = express();
 
-const APP_KEY = 'UtCg7EvWMG)kYVO*HiHNhw((';
+const APP_KEY = process.env.STACKEXCHANGE_KEY;
 
 // Type definitions define the "shape" of your data and specify
 // which ways the data can be fetched from the GraphQL server.
@@ -391,11 +394,10 @@ const server = new ApolloServer({
   context: () => ({access_token: access.access_token})
 });
 
-
-const CLIENT_ID = '14215';
-const CLIENT_SECRET = 'pCDzLjLHnUhFsSnC0g*weA((';
-const SCOPE = 'private_info';
-const REDIRECT_URI = 'http://localhost:4000/success/callback';
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const SCOPE = process.env.SCOPE;
+const REDIRECT_URI = process.env.REDIRECT_URI;
 
 app.get('/authorize', (req, res) => {
   res.redirect(`https://stackoverflow.com/oauth?client_id=${CLIENT_ID}&scope=${SCOPE}&redirect_uri=${REDIRECT_URI}`)
